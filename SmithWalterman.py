@@ -63,19 +63,20 @@ def processaBacktrace():
     for i in range(1, len(caminho)):
         # Movimento diagonal
         if path_inicial[0] == caminho[i][0] + 1 and path_inicial[1] == caminho[i][1] + 1:
-            # print(f"XD: {sequencia1_alinhada}")
             sequencia1_alinhada += sequencia1[j - 1]
             sequencia2_alinhada += sequencia2[k - 1]
 
         # Movimento a esquerda
         elif path_inicial[0] == caminho[i][0] and path_inicial[1] == caminho[i][1] + 1:
-            sequencia1_alinhada += sequencia1[j - 1]
-            sequencia2_alinhada += "-"
+        #    print(f"Esq -> i: {i} | j: {j} | k: {k}")
+            sequencia1_alinhada += "-"
+            sequencia2_alinhada += sequencia2[k - 1]
 
         # Movimento para cima
         elif path_inicial[0] == caminho[i][0] + 1 and path_inicial[1] == caminho[i][1]:
-            sequencia1_alinhada += "-"
-            sequencia2_alinhada += sequencia2[k - 1]
+        #    print(f"Cima -> i: {i} | j: {j} | k: {k}")
+            sequencia1_alinhada += sequencia1[j - 1]
+            sequencia2_alinhada += "-"
 
         path_inicial = caminho[i]
         j, k = path_inicial
