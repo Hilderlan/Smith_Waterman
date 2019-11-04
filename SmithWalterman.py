@@ -1,6 +1,6 @@
-match = 2
-mismatch = -3
-gap = -4
+match = 0
+mismatch = 0
+gap = 0
 sequencia1 = ""
 sequencia2 = ""
 caminho = []
@@ -35,12 +35,7 @@ def alinhamento_global():
 
     pos_inicial = criarScoreMatriz()
 
-#    for i in lista_scores:
-#        print(f"Valor: {i.valor} - Pais: {i.pais}")
-
     backtrace(pos_inicial)
-
-#    print(f"Seq1: {sequencia1_alinhada}\nSeq2: {sequencia2_alinhada}")
 
 
 def verificar(path):
@@ -63,6 +58,7 @@ def processaBacktrace():
     sequencia2_alinhada = ""
     path_inicial = caminho[0]
     j, k = path_inicial
+    score = verificar(path_inicial)
 
     for i in range(1, len(caminho)):
         # Movimento diagonal
@@ -85,32 +81,29 @@ def processaBacktrace():
         j, k = path_inicial
 
     # Ajeitando a ultima entrada
-    if j - 1 < 0:
+    if j == 0 and k == 0:
+        sequencia1_alinhada += ""
+        sequencia2_alinhada += ""
+    elif j - 1 < 0:
         sequencia1_alinhada += "-"
         sequencia2_alinhada += sequencia2[k - 1]
     elif k - 1 < 0:
         sequencia1_alinhada += sequencia1[j - 1]
         sequencia2_alinhada += "-"
     else:
-        sequencia1_alinhada += sequencia1[j - 1]
-        sequencia2_alinhada += sequencia2[k - 1]
-
-    print(f"Seq1 = {sequencia1_alinhada}\nSeq2 = {sequencia2_alinhada}")
+        sequencia1_alinhada += ""
+        sequencia2_alinhada += ""
 
     alinhamento_final = ''.join(
-        reversed(sequencia1_alinhada)) + "\n" + ''.join(reversed(sequencia2_alinhada))
+        reversed(sequencia1_alinhada)) + "\n" + ''.join(reversed(sequencia2_alinhada)) + "\n" + "SCORE = " + str(score.valor)
 
     print(alinhamento_final)
 
+    arq_final = open("output.fasta", "w")
+    arq_final.write(alinhamento_final)
+
 
 def backtrace(pos_inicial):
-    #    for i in lista_scores:
-    #           print(f"Valor: {i.valor} - Pais: {i.pais}")
-
-    #    for val in lista_scores:
-    #        print(
-    #            f"Valor: {val.valor} - Path: {val.path} - Pais: {val.pais}   Tam: {len(val.pais)}")
-
     caminho.append(pos_inicial)
 
     s = verificar(pos_inicial)
@@ -120,7 +113,7 @@ def backtrace(pos_inicial):
 
         s = verificar(pos_inicial)
 
-    print(f"Caminho: {caminho}")
+    print(f"\n\nCaminho: {caminho}\n\n")
 
     processaBacktrace()
 
@@ -239,7 +232,17 @@ def printMatriz():
 
 
 if __name__ == "__main__":
-    sequencia1 = "GLSD"
-    sequencia2 = "MGLSE"
+    arq = open("input.fasta", "r")
+    lista_entrada = arq.readlines()
+
+    sequencia1 = lista_entrada[1].split("\n")[0]
+    sequencia2 = lista_entrada[3].split("\n")[0]
+
+    match = int(input("Digite o valor do Math: "))
+    mismatch = int(input("Digite o valor do Mismath: "))
+    gap = int(input("Digite o valor do GAP: "))
+    print("\n\n")
 
     alinhamento_global()
+
+    arq.close()
