@@ -1,3 +1,8 @@
+# Implementação do algoritmo de Smith-Waterman
+# Hilderlan da Silva Almeida
+# Diciplina: Tópicos em Bioinformática
+# Professor: Dr. Luiz Cláudio Demes da Mata Sousa
+
 match = 0
 mismatch = 0
 gap = 0
@@ -45,14 +50,6 @@ def verificar(path):
     return None
 
 
-def buscarPais(pais):
-    for s in lista_scores:
-        for pai in s.pais:
-            if pai[0] == pais[0] and pai[1] == pais[1]:
-                return s
-    return None
-
-
 def processaBacktrace():
     sequencia1_alinhada = ""
     sequencia2_alinhada = ""
@@ -68,13 +65,11 @@ def processaBacktrace():
 
         # Movimento a esquerda
         elif path_inicial[0] == caminho[i][0] and path_inicial[1] == caminho[i][1] + 1:
-        #    print(f"Esq -> i: {i} | j: {j} | k: {k}")
             sequencia1_alinhada += "-"
             sequencia2_alinhada += sequencia2[k - 1]
 
         # Movimento para cima
         elif path_inicial[0] == caminho[i][0] + 1 and path_inicial[1] == caminho[i][1]:
-        #    print(f"Cima -> i: {i} | j: {j} | k: {k}")
             sequencia1_alinhada += sequencia1[j - 1]
             sequencia2_alinhada += "-"
 
@@ -82,7 +77,17 @@ def processaBacktrace():
         j, k = path_inicial
 
     # Ajeitando a ultima entrada
-    if j == 0 and k == 0:
+    if j - 1 > 0:
+        sequencia1_alinhada += sequencia1[j - 1]
+        sequencia2_alinhada += "-"
+        sequencia1_alinhada += sequencia1[j - 2]
+        sequencia2_alinhada += "-"
+    elif k - 1 > 0:
+        sequencia1_alinhada += "-"
+        sequencia2_alinhada += sequencia2[k - 1]
+        sequencia1_alinhada += "-"
+        sequencia2_alinhada += sequencia2[k - 2]
+    elif j == 0 and k == 0:
         sequencia1_alinhada += ""
         sequencia2_alinhada += ""
     elif j - 1 < 0:
@@ -98,10 +103,9 @@ def processaBacktrace():
     alinhamento_final = ''.join(
         reversed(sequencia1_alinhada)) + "\n" + ''.join(reversed(sequencia2_alinhada)) + "\n" + "SCORE = " + str(score.valor)
 
-    print(alinhamento_final)
-
     arq_final = open("output.fasta", "w")
     arq_final.write(alinhamento_final)
+    arq.close()
 
 
 def backtrace(pos_inicial):
@@ -191,7 +195,6 @@ def criarScoreMatriz():
 
             pos_inicial = (i, j)
 
-    printMatriz()
     return pos_inicial
 
 
@@ -233,6 +236,8 @@ def printMatriz():
 
 
 if __name__ == "__main__":
+    print("\n\n-------> Smith-Waterman <-------\n\n")
+
     arq = open("input.fasta", "r")
     lista_entrada = arq.readlines()
 
@@ -242,8 +247,11 @@ if __name__ == "__main__":
     match = int(input("Digite o valor do Math: "))
     mismatch = int(input("Digite o valor do Mismath: "))
     gap = int(input("Digite o valor do GAP: "))
-    print("\n\n")
 
     alinhamento_global()
 
     arq.close()
+
+    print("\nAlgoritmo concluido! Verifique no arquivo Output.fasta a resposta!!!")
+
+    print("\n\n-------> Smith-Waterman <-------\n\n")

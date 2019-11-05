@@ -1,0 +1,11 @@
+  --> Instruções
+
+- Para utilizar devidamente o programa, primeiramente substitua as sequências que estão no arquivo "input.fasta"
+- Insira também via console os valores de Math, Mismatch e GAP nesta ordem
+- Após isso será gerada uma matriz de scores para fazer o backtrace
+- Cada elemento do backtrace pertence a uma classe chamada Score, a qual armazena seu valor e os pais (de onde ele foi gerado)
+- Se um elemento tiver mais de um pai, o que está na posição 0 é priorizado (O primeiro da lista, no caso)
+- Os resultados são exibidos no arquivo "output.fasta"
+
+- Para executar o programa, utilize o python3
+  - Comando para executar no linux/Mac via terminal: python3 SmithWaternab.py
